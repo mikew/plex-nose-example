@@ -12,7 +12,10 @@ def publish_local_file(local_path, name = None):
     core.sandbox.publish_api(contents, name = name)
 
 def sandbox(f):
-    import nose
+    def wrapper():
+        import nose
 
-    core.sandbox.publish_api(nose)
-    core.sandbox.execute(f.func_code)
+        core.sandbox.publish_api(nose)
+        core.sandbox.execute(f.func_code)
+
+    return wrapper
