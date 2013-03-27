@@ -1,11 +1,7 @@
-config = dict()
+core = None
 
-def bridge(**kwargs):
-    global config
+def sandbox(f):
+    import nose
 
-    for key, val in kwargs.iteritems():
-        if not key in config: config[key] = val
-
-def extend(base):
-    for key, val in config.iteritems():
-        setattr(base, key, val)
+    core.sandbox.publish_api(nose)
+    core.sandbox.execute(f.func_code)

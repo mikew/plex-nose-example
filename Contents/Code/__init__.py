@@ -1,12 +1,14 @@
+import some_code
+
 PLUGIN_PREFIX = '/video/plex-nose-example'
 
 def Start():
-    ''
+    pass
 
 def ValidatePrefs():
     pass
 
-@handler(PLUGIN_PREFIX, PLUGIN_TITLE)
+@handler(PLUGIN_PREFIX, some_code.title())
 def GetEnv():
     import os
 

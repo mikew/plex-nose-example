@@ -82,7 +82,7 @@ import Framework.constants as const
 
 class BootstrapOptions:
     def __init__(self):
-        self.interface      = 'pipe'
+        self.interface      = 'socket'
         self.verbose        = True
         self.server_version = None
         self.daemon_command = None
@@ -162,6 +162,9 @@ if core.init_code:
 
 sys.path.insert(0, core.code_path)
 
+import plex_nose
+plex_nose.core = core
+
 #from nose.plugins import Plugin
 
 #class PlexSandbox(Plugin):
@@ -173,30 +176,29 @@ sys.path.insert(0, core.code_path)
         #raise Exception(runner)
         #return PlexSandboxRunner(runner.stream)
 
-#import sys
-#import nose
-#sys.argv.insert(1, '-vv')
-#sys.argv.insert(1, '-s')
-#nose.main(addplugins=[PlexSandbox()])
+import sys
+import nose
+sys.argv.insert(1, '-vv')
+sys.argv.insert(1, '-s')
+nose.main()
 
-def nose_runner():
-    import sys
-    import nose
-    import plex_nose
+#def nose_runner():
+    #import sys
+    #import nose
 
-    sys.argv.insert(1, '-vv')
-    sys.argv.insert(1, '-s')
+    #sys.argv.insert(1, '-vv')
+    #sys.argv.insert(1, '-s')
 
-    plex_nose.bridge(
-        L = L,
-        F = F,
-        JSON = JSON,
-        XML = XML,
-        HTTP = HTTP,
-        Dict = Dict,
-        Prefs = Prefs
-    )
+    #plex_nose.bridge(
+        #L = L,
+        #F = F,
+        #JSON = JSON,
+        #XML = XML,
+        #HTTP = HTTP,
+        #Dict = Dict,
+        #Prefs = Prefs
+    #)
 
-    nose.main()
+    #nose.main()
 
-core.sandbox.execute(nose_runner.func_code)
+#core.sandbox.execute(nose_runner.func_code)

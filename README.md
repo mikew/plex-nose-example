@@ -17,5 +17,7 @@ To run the tests manually, you need the env variables mentioned earlier:
 Caveats
 =======
 
-* Code in `__init__.py` cannot be tested. Things like `L` and `@handler` cause troubles.
-* Tests are run twice when using the Guardfile
+* Tests that pass aren't added to the number of tests run, so if all tests pass you will see 'Ran 0 tests'.
+
+  Failures will still present themselves though, so all is not lost.
+* Tests are run twice when using the Guardfile.
