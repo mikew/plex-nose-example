@@ -1,3 +1,5 @@
+from functools import wraps
+
 core = None
 
 def publish_local_file(local_path, name = None):
@@ -12,10 +14,14 @@ def publish_local_file(local_path, name = None):
     core.sandbox.publish_api(contents, name = name)
 
 def sandbox(f):
+
+    @wraps(f)
     def wrapper():
         import nose
 
         core.sandbox.publish_api(nose)
+        core.sandbox.publish_api(nose.tools.eq_)
+        core.sandbox.publish_api(nose.tools.ok_)
         core.sandbox.execute(f.func_code)
 
     return wrapper
