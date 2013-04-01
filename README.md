@@ -13,8 +13,3 @@ This should work without any modification on OS X. You need to get some env vari
 To run the tests manually, you need the env variables mentioned earlier:
 
     $ env ... python2.5 Contents/Tests/nose_runner.py Contents/Tests/test_....py
-
-Caveats
-=======
-
-* Tests are run twice when using the Guardfile.
