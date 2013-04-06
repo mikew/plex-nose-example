@@ -31,6 +31,41 @@ class TestCase(unittest.TestCase):
     def setUp(self):     stub_dict()
     def tearDown(self):  reset_dict()
 
+    def run(self, result=None):
+        if result is None: result = self.defaultTestResult()
+        result.startTest(self)
+        testMethod = getattr(self, self._testMethodName)
+        try:
+            try:
+                self.setUp()
+            except KeyboardInterrupt:
+                raise
+            except:
+                result.addError(self, self._exc_info())
+                return
+
+            ok = False
+            try:
+                core.sandbox.execute(testMethod.func_code)
+                ok = True
+            except self.failureException:
+                result.addFailure(self, self._exc_info())
+            except KeyboardInterrupt:
+                raise
+            except:
+                result.addError(self, self._exc_info())
+
+            try:
+                self.tearDown()
+            except KeyboardInterrupt:
+                raise
+            except:
+                result.addError(self, self._exc_info())
+                ok = False
+            if ok: result.addSuccess(self)
+        finally:
+            result.stopTest(self)
+
 def publish_local_file(local_path, name = None):
     local_path = os.path.abspath(core.bundle_path + '/' + local_path)
     local_file = open(local_path, 'r')
