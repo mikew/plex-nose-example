@@ -2,7 +2,7 @@ def python_unittest(test_file)
   return unless File.exist? test_file
 
   runner = case RUBY_PLATFORM
-  when /linux/  then 'linux'
+  when /linux/  then 'ubuntu'
   when /darwin/ then 'osx'
   end
 

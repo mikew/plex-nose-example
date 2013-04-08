@@ -19,7 +19,6 @@ bundle_path   = os.path.abspath(inspect.getfile(inspect.currentframe()) + '/../.
 sys.path.insert(0, PYTHON_DIR)
 
 import subsystem
-import os
 import config
 
 # Redirect stdout to stderr
@@ -137,6 +136,7 @@ else:
 daemonized = False
 # Copy the damonized attribute into config
 setattr(config, 'daemonized', daemonized)
+setattr(config, 'log_file', bundle_path + '/test.log')
 
 # Create a core object for the plug-in bundle
 core = Framework.core.FrameworkCore(bundle_path, FRAMEWORK_DIR, config)
@@ -170,4 +170,5 @@ import nose
 sys.argv.insert(1, '-vv')
 sys.argv.insert(1, '-s')
 
-nose.main()
+nose.run()
+os._exit(1)
