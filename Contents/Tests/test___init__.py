@@ -1,6 +1,4 @@
 import plex_nose
-from nose.tools import raises, with_setup
-from plex_nose import sandbox as sandboxed
 
 # Code/__init__.py is already imported, but Start() is not called.
 class SimpleTests(plex_nose.TestCase):
@@ -33,15 +31,15 @@ class PublishLocalFileTests(plex_nose.TestCase):
 
 # The not-so-simple method of writing simple tests. At least you can use
 # decorators from nose.tools here
-@with_setup(plex_nose.stub_dict, plex_nose.reset_dict)
+from nose.tools import raises, with_setup
+from plex_nose import sandbox as sandboxed
+
 @sandboxed
 def test_dict_is_clean():
-    ok_('some_data' not in Dict)
     Dict['some_data'] = True
     Dict.Save()
     ok_('some_data' in Dict)
 
-@with_setup(plex_nose.stub_dict, plex_nose.reset_dict)
 @sandboxed
 def test_dict_is_cleaned():
     ok_('some_data' not in Dict)

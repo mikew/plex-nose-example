@@ -1,21 +1,58 @@
-# A sample Guardfile
-# More info at https://github.com/guard/guard#readme
+#os.path.expanduser('~/Library/Application Support/Plex Media Server/Plug-ins/Framework.bundle/Contents/Resources/Versions/2/Python')
+def env_for_osx
+  framework_resources = '~/Library/Application Support/Plex Media Server/Plug-ins/Framework.bundle/Contents/Resources'
+  dyld_path = [
+    "#{framework_resources}/Platforms/MacOSX/i386/Frameworks/",
+    "#{framework_resources}/Versions/2/Platforms/MacOSX/i386/Frameworks/",
+    "#{framework_resources}/Versions/2/Frameworks/"
+  ].join ':'
 
-# Add files and commands to this file, like the example:
-#   watch(%r{file/path}) { `command(s)` }
-#
+  <<ENV
+  DYLD_LIBRARY_PATH="#{dyld_path}"
+  PLEX_FRAMEWORK_PATH="#{framework_resources}/Versions/2/Python"
+ENV
+end
+
+def env_for_ubuntu
+  <<ENV
+  PLEXLOCALAPPDATA="/var/lib/plexmediaserver/Library/Application Support"
+  PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR="/var/lib/plexmediaserver/Library/Application Support"
+  PYTHONHOME="/usr/lib/plexmediaserver/Resources/Python"
+  PLEX_MEDIA_SERVER_HOME="/usr/lib/plexmediaserver"
+  PLEX_MEDIA_SERVER_MAX_STACK_SIZE="3000"
+  PLEX_MEDIA_SERVER_TMPDIR="/tmp"
+  LD_LIBRARY_PATH="/usr/lib/plexmediaserver"
+  PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS="6"
+  PLEX_FRAMEWORK_PATH="/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Plug-ins/Framework.bundle/Contents/Resources/Versions/2/Python"
+ENV
+end
 
 def python_unittest(test_file)
   root      = Pathname File.expand_path('../', __FILE__)
   test_file = root.join test_file
-  dyld_path = [
-    '~/Library/Application Support/Plex Media Server/Plug-ins/Framework.bundle/Contents/Resources/Platforms/MacOSX/i386/Frameworks/',
-    '~/Library/Application Support/Plex Media Server/Plug-ins/Framework.bundle/Contents/Resources/Versions/2/Platforms/MacOSX/i386/Frameworks/',
-    '~/Library/Application Support/Plex Media Server/Plug-ins/Framework.bundle/Contents/Resources/Versions/2/Frameworks/'
-  ].join(':').gsub '~/', ENV['HOME'] + '/'
-  env = %Q(DYLD_LIBRARY_PATH="#{dyld_path}")
 
-  `[ -f #{test_file} ] && env #{env} python2.5 Contents/Tests/nose_runner.py #{test_file}`
+  case RUBY_PLATFORM
+  when /linux/
+    env    = env_for_ubuntu
+    python = '/usr/lib/plexmediaserver/Resources/Python/bin/python'
+    #python = '/usr/bin/python2.7-dbg -d'
+  when /darwin/
+    env    = env_for_osx
+    python = 'python2.5'
+  end
+
+  env = sanitize! env
+
+  `[ -f #{test_file} ] && env #{env} #{python} Contents/Tests/nose_runner.py #{test_file}`
+  #`[ -f #{test_file} ] && Contents/Tests/plex-nose-ubuntu #{test_file}`
+end
+
+def sanitize!(env)
+  env.to_s.
+    gsub(/\r?\n/, ' ').
+    gsub(/\t/, ' ').
+    gsub(/ +/, ' ').
+    gsub('~/', ENV['HOME'] + '/')
 end
 
 guard 'shell' do

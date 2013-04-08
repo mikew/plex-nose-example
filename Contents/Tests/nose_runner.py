@@ -11,7 +11,7 @@ import os, inspect
 
 # Get python path from Plex Media Server installation
 # OS X specific currently
-PYTHON_DIR    = os.path.expanduser('~/Library/Application Support/Plex Media Server/Plug-ins/Framework.bundle/Contents/Resources/Versions/2/Python')
+PYTHON_DIR    = os.path.expanduser(os.environ['PLEX_FRAMEWORK_PATH'])
 FRAMEWORK_DIR = os.path.abspath(os.path.join(PYTHON_DIR, '..'))
 
 # Get the path to our plugin.bundle
@@ -165,40 +165,9 @@ sys.path.insert(0, core.code_path)
 import plex_nose
 plex_nose.core = core
 
-#from nose.plugins import Plugin
-
-#class PlexSandbox(Plugin):
-    #name = 'plex_sandbox'
-    #score = 10000
-
-    #def prepareTestRunner(self, runner):
-        #asdfasdfasdf
-        #raise Exception(runner)
-        #return PlexSandboxRunner(runner.stream)
-
 import sys
 import nose
 sys.argv.insert(1, '-vv')
 sys.argv.insert(1, '-s')
+
 nose.main()
-
-#def nose_runner():
-    #import sys
-    #import nose
-
-    #sys.argv.insert(1, '-vv')
-    #sys.argv.insert(1, '-s')
-
-    #plex_nose.bridge(
-        #L = L,
-        #F = F,
-        #JSON = JSON,
-        #XML = XML,
-        #HTTP = HTTP,
-        #Dict = Dict,
-        #Prefs = Prefs
-    #)
-
-    #nose.main()
-
-#core.sandbox.execute(nose_runner.func_code)
