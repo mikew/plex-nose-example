@@ -15,7 +15,7 @@ class DictTests(plex_nose.TestCase):
         ok_(method_using_dict())
 
     def test_dict_is_reset():
-        eq_({}, Dict._dict)
+        ok_('some_data' not in Dict)
 
 # Code executed in the sandbox will not have access to file/open, to read a
 # local file use plex_nose.publish_local_file and write the tests inside

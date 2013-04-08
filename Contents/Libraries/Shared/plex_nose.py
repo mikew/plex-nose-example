@@ -16,7 +16,12 @@ def run_once():
         run_once_ = True
 
 class EmptyDict(Framework.api.datakit.DictKit):
-    def _really_save(self): pass
+    def _init(self):
+        super(EmptyDict, self)._init()
+        self._dict_path = core.bundle_path + '/Contents/Tests/Dict'
+
+    def Save(self):
+        pass
 
 def stub_dict():
     _dict = EmptyDict(core.sandbox)
