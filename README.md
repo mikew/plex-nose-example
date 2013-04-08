@@ -4,7 +4,7 @@ This should show how to get Plex and nose working together.
 
 ## Requirements
 
-You are expected to have Plex Media Server, of course.
+You are expected to have Plex Media Server installed, of course.
 
 ## Usage
 
@@ -48,7 +48,6 @@ bundler installed.
 
 ### Ubuntu
 
-    sudo apt-get -y install
     sudo apt-get -y install ruby1.9.1 ruby1.9.1-dev
     sudo gem install bundler rake
     bundle install --path .bundle/gems/
