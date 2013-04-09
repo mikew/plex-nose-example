@@ -137,6 +137,7 @@ daemonized = False
 # Copy the damonized attribute into config
 setattr(config, 'daemonized', daemonized)
 setattr(config, 'log_file', bundle_path + '/test.log')
+setattr(config, 'services_bundle_path', bundle_path)
 
 # Create a core object for the plug-in bundle
 core = Framework.core.FrameworkCore(bundle_path, FRAMEWORK_DIR, config)
