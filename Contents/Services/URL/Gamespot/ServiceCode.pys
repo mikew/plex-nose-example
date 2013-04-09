@@ -1,10 +1,10 @@
-import consts
+import common
 
 def NormalizeURL(url):
     return url
 
 def MetadataObjectForURL(url):
-    pass
+    return VideoClipObject(title = url)
 
 def MediaObjectsForURL(url):
     cb = Callback(PlayVideo, url = url)
@@ -16,15 +16,7 @@ def MediaObjectsForURL(url):
 
 @indirect
 def PlayVideo(url):
-    final = None
-
-    if '/dl_movie/' in url:
-        final = url
-    else:
-        element = HTML.ElementFromURL(url)
-        found = consts.video_from(element)
-        if found:
-            final = found['url']
+    final = common.final_video_url(url)
 
     if final:
         return IndirectResponse(VideoClipObject, key = final)

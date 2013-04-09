@@ -1,4 +1,5 @@
 PLUGIN_PREFIX = '/video/plex-nose-example'
+import tutorial
 
 def Start():
     pass
@@ -6,7 +7,7 @@ def Start():
 def ValidatePrefs():
     pass
 
-@handler(PLUGIN_PREFIX, L('title'))
+@route('%s/env' % tutorial.consts.prefix)
 def GetEnv():
     import os
 
@@ -16,7 +17,6 @@ def GetEnv():
 
     return ObjectContainer(header = 'Plex ENV', message = env)
 
-@route('%s/title' % PLUGIN_PREFIX)
 def title():
     return L('title')
 

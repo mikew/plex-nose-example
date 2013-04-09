@@ -1,0 +1,34 @@
+import consts
+
+def permalink_for(string = '/'):
+    return consts.base_url % string
+
+def video_from_player(element):
+    latest = element.cssselect('h1.video_title')
+
+    if latest:
+        url   = element.cssselect(consts.video_selector)[0].get('src')
+        title = latest[0].text_content().strip()
+
+        return dict(title = title, url = url)
+
+def url_for_section(section):
+    base = permalink_for('/videos/')
+
+    if 'all' == section:
+        return base
+    else:
+        return base + section + '/'
+
+def final_video_url(url):
+    final = None
+
+    if '/dl_movie/' in url:
+        final = url
+    else:
+        element = HTML.ElementFromURL(url)
+        found = video_from_player(element)
+        if found:
+            final = found['url']
+
+    return final

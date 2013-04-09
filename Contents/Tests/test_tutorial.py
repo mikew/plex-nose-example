@@ -3,13 +3,9 @@ import plex_nose
 class TutorialTest(plex_nose.TestCase):
     @classmethod
     def setUpClass(cls):
-        # This saves us from writing `import tutorial` at the start of
-        # each test
-        plex_nose.core.sandbox.execute('import tutorial')
-
-        # Used in test_mosiac_menu
-        plex_nose.publish_local_file('Contents/Tests/mosiac.html', 
-                name = 'mosiac')
+        # Used in test_mosaic_menu
+        plex_nose.publish_local_file('Contents/Tests/mosaic.html',
+            name = 'mosaic')
 
     def test_main_menu():
         container = tutorial.MainMenu()
@@ -24,18 +20,18 @@ class TutorialTest(plex_nose.TestCase):
             ok_('/%s' % section in subject.key)
             i += 1
 
-    def test_mosiac_menu():
+    def test_mosaic_menu():
         # This may look wild, but it means our test won't actually hit
         # the network, so we get (a) faster tests and (b) consistent
         # data to test against
         import mock
-        m = mock.MagicMock(return_value = HTML.ElementFromString(mosiac))
+        m = mock.MagicMock(return_value = HTML.ElementFromString(mosaic))
         om_ = HTML.ElementFromURL
         HTML.ElementFromURL = m
 
-        container = tutorial.MosiacMenu('all')
+        container = tutorial.MosaicMenu('all')
 
-        # Ensure MosiacMenu calls HTML.ElementFromURL
+        # Ensure MosaicMenu calls HTML.ElementFromURL
         m.assert_called_once_with('http://www.gamespot.com/videos/?page=1')
 
         eq_('title.all', container.title1._key)
