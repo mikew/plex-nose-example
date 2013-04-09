@@ -9,15 +9,17 @@ def python_unittest(test_file)
   system *[ "./run-#{runner}.sh", test_file ]
 end
 
-def sanitize!(env)
-  env.to_s.
-    gsub(/\r?\n/, ' ').
-    gsub(/\t/, ' ').
-    gsub(/ +/, ' ').
-    gsub('~/', ENV['HOME'] + '/')
-end
-
 guard 'shell' do
-  watch(%r{Contents/Code/(.*).py$})       {|m| python_unittest "Contents/Tests/test_#{m[1]}.py" }
-  watch(%r{Contents/Tests/test_(.*).py$}) {|m| python_unittest "Contents/Tests/test_#{m[1]}.py" }
+  watch %r{Contents/Code/([^/]+/)*(.*).py$} do |m|
+    python_unittest "Contents/Tests/#{m[1]}test_#{m[2]}.py"
+  end
+
+  watch %r{Contents/Services/([^/]+/)*(.*).pys?$} do |m|
+    python_unittest "Contents/Tests/Services/#{m[1]}test_#{m[2]}.py"
+  end
+
+  watch %r{Contents/Tests/([^/]+/)*test_(.*).py$}  do |m|
+    python_unittest m[0]
+  end
+
 end
