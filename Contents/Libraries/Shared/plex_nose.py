@@ -31,7 +31,7 @@ def stub_dict():
     core.sandbox.publish_api(_dict, name = 'Dict')
 
 def reset_dict():
-    core.sandbox.call_named_function('Reset', mod_name = 'Dict', raise_exceptions = True)
+    core.sandbox.execute('Dict.Reset()')
 
 def publish_local_file(local_path, name = None):
     local_path = os.path.abspath(core.bundle_path + '/' + local_path)
