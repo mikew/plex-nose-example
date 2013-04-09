@@ -60,37 +60,6 @@ sys.path.insert(0, os.path.join(SHARED_DIR, "Libraries"))
 ## LOAD AND CONFIGURE THE FRAMEWORK ##
 
 import Framework
-import Framework.constants as const
-#from optparse import OptionParser
-
-#parser = OptionParser()
-#parser.add_option("-i", "--interface", dest="interface", default=config.default_interface)
-#parser.add_option("-q", "--quiet", action="store_false", dest="verbose", default=True)
-#parser.add_option("-p", "--socket-interface-port", dest="socket_interface_port", default=config.socket_interface_port)
-#parser.add_option("-s", "--server-version", dest="server_version")
-#parser.add_option("-d", "--daemon", dest="daemon_command")
-#parser.add_option("-P", "--pid-file", dest="pid_file")
-#parser.add_option("-l", "--log-file", dest="log_file")
-#parser.add_option("-c", "--config-file", dest="config_file")
-#(options, args) = parser.parse_args()
-
-#bundle_path = args[0]
-
-#del parser
-#del OptionParser
-
-class BootstrapOptions:
-    def __init__(self):
-        self.interface      = 'socket'
-        self.verbose        = True
-        self.server_version = None
-        self.daemon_command = None
-        self.pid_file       = None
-        self.log_file       = None
-        self.config_file    = None
-        self.socket_interface_port = config.socket_interface_port
-
-options = BootstrapOptions()
 
 # Whack any .pyc files found in Contents/Libraries
 libs_path = os.path.join(bundle_path, 'Contents', 'Libraries')
@@ -100,38 +69,6 @@ if os.path.exists(libs_path):
             if f[-4:] == '.pyc':
                 fp = os.path.join(root, f)
                 os.unlink(fp)
-
-# Select the interface class to use
-if options.interface == const.interface.pipe:
-    interface_class = Framework.interfaces.PipeInterface
-elif options.interface == const.interface.socket:
-    interface_class = Framework.interfaces.SocketInterface
-    if int(options.socket_interface_port) != config.socket_interface_port:
-        config.socket_interface_port = int(options.socket_interface_port)
-else:
-    #TODO: Error info - no matching interface found
-    sys.stderr.write('No matching interface found.\n')
-    sys.exit(1)
-
-#if options.server_version != None:
-    #config.server_version = options.server_version
-
-# Configure the log_dir, if one was given
-#if options.log_file:
-    #config.log_file = os.path.abspath(options.log_file)
-
-# Configure the pid file, if one was given
-#if options.pid_file:
-    #config.pid_file = os.path.abspath(options.pid_file)
-
-# Load the config file if one was provided
-#if options.config_file:
-    #import simplejson
-    #f = open(options.config_file, 'r')
-    #json_config = simplejson.load(f)
-    #f.close()
-    #for key in json_config:
-        #setattr(config, key, json_config[key])
 
 daemonized = False
 # Copy the damonized attribute into config
@@ -147,29 +84,17 @@ if not core.load_code():
     sys.stderr.write('Error loading bundle code.\n')
     sys.exit(2)
 
-# Create an instance of the selected interface
-#interface = interface_class(core)
-
-# Try to start the core
-#if not core.start():
-    #sys.stderr.write('Error starting framework core.\n')
-    #sys.exit(3)
-
 if core.init_code:
     core.sandbox.execute(core.init_code)
-
-# Start listening on the interface
-#interface.listen(daemonized)
 
 sys.path.insert(0, core.code_path)
 
 import plex_nose
-plex_nose.core = core
-
 import sys
-import nose
+
 sys.argv.insert(1, '-vv')
 sys.argv.insert(1, '-s')
 
-nose.run()
+plex_nose.core = core
+plex_nose.nose.run()
 os._exit(1)
