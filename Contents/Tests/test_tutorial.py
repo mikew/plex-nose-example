@@ -24,12 +24,6 @@ class TutorialTest(plex_nose.TestCase):
             ok_('/%s' % section in subject.key)
             i += 1
 
-    def test_url_for_section():
-        eq_('http://www.gamespot.com/videos/',
-                tutorial.url_for_section('all'))
-        eq_('http://www.gamespot.com/videos/interviews/',
-                tutorial.url_for_section('interviews'))
-
     def test_mosiac_menu():
         # This may look wild, but it means our test won't actually hit
         # the network, so we get (a) faster tests and (b) consistent
