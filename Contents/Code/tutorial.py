@@ -16,7 +16,7 @@ def MainMenu():
 
     return container
 
-@route('%s/{section}' % consts.prefix)
+@route('%s/videos/{section}' % consts.prefix)
 def MosaicMenu(section, page = 1):
     container = ObjectContainer(title1 = L('title.%s' % section))
     url       = common.url_for_section(section) + '?page=%s' % page
