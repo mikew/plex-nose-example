@@ -53,9 +53,6 @@ def sandbox(f):
     return wrapper
 
 class TestCase(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls): run_once()
-
     def _exc_info(self):
         """Return a version of sys.exc_info() with the traceback frame
            minimised; usually the top level of the traceback frame is not
