@@ -23,7 +23,8 @@ class DictTests(plex_nose.TestCase):
 #
 # Use plex_nose.publish_local_file(f, name = 'named') to avoid collisions.
 class PublishLocalFileTests(plex_nose.TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         plex_nose.publish_local_file('Contents/Tests/mocked_data')
 
     def test_mocked_file():
