@@ -21,7 +21,8 @@ def PlayVideo(url):
     if '/dl_movie/' in url:
         final = url
     else:
-        found = consts.video_from(url)
+        element = HTML.ElementFromURL(url)
+        found = consts.video_from(element)
         if found:
             final = found['url']
 
