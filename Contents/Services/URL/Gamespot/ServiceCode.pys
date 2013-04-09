@@ -1,0 +1,17 @@
+def NormalizeURL(url):
+    return url
+
+def MetadataObjectForURL(url):
+    pass
+
+def MediaObjectsForURL(url):
+    cb = Callback(PlayVideo, url = url)
+    mo = MediaObject(
+        parts = [ PartObject( key = cb ) ]
+    )
+
+    return [ mo ]
+
+@indirect
+def PlayVideo(url):
+    return IndirectResponse(VideoClipObject, key = url)
