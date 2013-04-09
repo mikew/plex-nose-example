@@ -16,8 +16,11 @@ class TutorialTest(plex_nose.TestCase):
         i = 0
         for section in tutorial.main_sections:
             subject = container.objects[i]
+            callback = Callback(tutorial.MosaicMenu, section = section)
+
             eq_('title.%s' % section, subject.title._key)
-            ok_('/%s' % section in subject.key)
+            eq_(callback, subject.key)
+
             i += 1
 
     def test_mosaic_menu():
