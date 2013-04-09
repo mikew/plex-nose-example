@@ -1,0 +1,22 @@
+prefix = '/video/plex-nose-example'
+base_url = 'http://www.gamespot.com%s'
+
+def permalink_for(string = '/'):
+    return base_url % string
+
+def video_from(element):
+    latest = element.cssselect('h1.video_title')
+
+    if latest:
+        url   = element.cssselect('#flash_req_msg video')[0].get('src')
+        title = latest[0].text_content().strip()
+
+        return dict(title = title, url = url)
+
+def url_for_section(section):
+    base = permalink_for('/videos/')
+
+    if 'all' == section:
+        return base
+    else:
+        return base + section + '/'
