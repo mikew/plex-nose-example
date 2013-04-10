@@ -31,7 +31,9 @@ class CommmonTests(plex_nose.TestCase):
         given_url = 'http://www.gamespot.com/some-media'
         expected  = 'http://www.gamespot.com/dl_movie/169_lost_between_levels_seattle.ipod.mp4?s=6406531&c=movie_ftp_&site=1&u=http%3A%2F%2Fdownload.gamespotcdn.com%2Fd8%2Fgsc%2F2013%2F04%2F169_lost_between_levels_seattle.ipod.mp4'
 
-        @mock.patch.object(HTML, 'ElementFromURL', return_value = HTML.ElementFromString(mosaic))
+        @mock.patch.object(common.HTML, 'ElementFromURL', return_value = HTML.ElementFromString(mosaic))
         def test(mock_html):
             eq_(expected, common.final_video_url(given_url))
             mock_html.assert_called_once_with(given_url)
+
+        test()

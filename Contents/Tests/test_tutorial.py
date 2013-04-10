@@ -37,3 +37,5 @@ class TutorialTest(plex_nose.TestCase):
 
             # Ensure MosaicMenu calls HTML.ElementFromURL
             mock_html.assert_called_once_with('http://www.gamespot.com/videos/?page=1')
+
+        test()
