@@ -25,17 +25,13 @@ class CommmonTests(plex_nose.TestCase):
         eq_(given_url, common.final_video_url(given_url))
 
     def test_final_video_url_extra():
+        import mock
         common = SharedCodeService.common
 
         given_url = 'http://www.gamespot.com/some-media'
         expected  = 'http://www.gamespot.com/dl_movie/169_lost_between_levels_seattle.ipod.mp4?s=6406531&c=movie_ftp_&site=1&u=http%3A%2F%2Fdownload.gamespotcdn.com%2Fd8%2Fgsc%2F2013%2F04%2F169_lost_between_levels_seattle.ipod.mp4'
 
-        import mock
-        m = mock.MagicMock(return_value = HTML.ElementFromString(mosaic))
-        om_ = common.HTML.ElementFromURL
-        common.HTML.ElementFromURL = m
-
-        eq_(expected, common.final_video_url(given_url))
-        m.assert_called_once_with(given_url)
-
-        common.HTML.ElementFromURL = om_
+        @mock.patch.object(HTML, 'ElementFromURL', return_value = HTML.ElementFromString(mosaic))
+        def test(mock_html):
+            eq_(expected, common.final_video_url(given_url))
+            mock_html.assert_called_once_with(given_url)
