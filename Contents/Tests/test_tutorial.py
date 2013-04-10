@@ -28,17 +28,12 @@ class TutorialTest(plex_nose.TestCase):
         # the network, so we get (a) faster tests and (b) consistent
         # data to test against
         import mock
-        m = mock.MagicMock(return_value = HTML.ElementFromString(mosaic))
-        om_ = HTML.ElementFromURL
-        HTML.ElementFromURL = m
+        @mock.patch.object(HTML, 'ElementFromURL', return_value = HTML.ElementFromString(mosaic))
+        def test(mock_html):
+            container = tutorial.MosaicMenu('all')
 
-        container = tutorial.MosaicMenu('all')
+            eq_('title.all', container.title1._key)
+            eq_(24, len(container.objects))
 
-        # Ensure MosaicMenu calls HTML.ElementFromURL
-        m.assert_called_once_with('http://www.gamespot.com/videos/?page=1')
-
-        eq_('title.all', container.title1._key)
-        eq_(24, len(container.objects))
-
-        # Restore our mocks
-        HTML.ElementFromURL = om_
+            # Ensure MosaicMenu calls HTML.ElementFromURL
+            mock_html.assert_called_once_with('http://www.gamespot.com/videos/?page=1')
