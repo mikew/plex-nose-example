@@ -9,10 +9,8 @@ class CommmonTests(plex_nose.TestCase):
     def test_url_for_section():
         common = SharedCodeService.common
 
-        eq_('http://www.gamespot.com/videos/',
-                common.url_for_section('all'))
-        eq_('http://www.gamespot.com/videos/interviews/',
-                common.url_for_section('interviews'))
+        eq_(common.url_for_section('all'), 'http://www.gamespot.com/videos/')
+        eq_(common.url_for_section('interviews'), 'http://www.gamespot.com/videos/interviews/')
 
     def test_final_video_url():
         common = SharedCodeService.common
@@ -22,7 +20,7 @@ class CommmonTests(plex_nose.TestCase):
         # The 'Latest Video' at the top of each Mosaic page is a player,
         # so sometimes we already know the final url
 
-        eq_(given_url, common.final_video_url(given_url))
+        eq_(common.final_video_url(given_url), given_url)
 
     def test_final_video_url_extra():
         import mock
@@ -33,7 +31,7 @@ class CommmonTests(plex_nose.TestCase):
 
         @mock.patch.object(common.HTML, 'ElementFromURL', return_value = HTML.ElementFromString(mosaic))
         def test(mock_html):
-            eq_(expected, common.final_video_url(given_url))
+            eq_(common.final_video_url(given_url), expected)
             mock_html.assert_called_once_with(given_url)
 
         test()

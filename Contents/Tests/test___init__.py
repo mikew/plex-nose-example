@@ -3,10 +3,10 @@ import plex_nose
 # Code/__init__.py is already imported, but Start() is not called.
 class SimpleTests(plex_nose.TestCase):
     def test_can_translate():
-        eq_('Plex/nose Example', str(title()))
+        eq_(str(title()), 'Plex/nose Example')
 
     def test_can_json():
-        eq_('Value', get_json()['key'])
+        eq_(get_json()['key'], 'Value')
 
 class DictTests(plex_nose.TestCase):
     def test_dict_can_modify():
@@ -28,11 +28,11 @@ class PublishLocalFileTests(plex_nose.TestCase):
         plex_nose.publish_local_file('Contents/Tests/mocked_data')
 
     def test_mocked_file():
-        nose.tools.eq_("heyo\n", mocked_data)
+        eq_(mocked_data, "heyo\n")
 
 # The not-so-simple method of writing simple tests. At least you can use
 # decorators from nose.tools here
-from nose.tools import raises, with_setup
+from nose.tools import raises
 from plex_nose import sandbox as sandboxed
 
 @sandboxed
@@ -40,6 +40,7 @@ def test_dict_is_clean():
     Dict['some_data'] = True
     Dict.Save()
     ok_('some_data' in Dict)
+    ok_('some_other_data' not in Dict)
 
 @sandboxed
 def test_dict_is_cleaned():
@@ -48,4 +49,4 @@ def test_dict_is_cleaned():
 @raises(AssertionError)
 @sandboxed
 def test_nose_decorators():
-    eq_('expected', 'actual')
+    eq_('given', 'expected')

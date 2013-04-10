@@ -10,8 +10,8 @@ class TutorialTest(plex_nose.TestCase):
     def test_main_menu():
         container = tutorial.MainMenu()
 
-        eq_(7, len(container.objects))
         eqL_(container.title1, 'title')
+        eq_(len(container.objects), 7)
 
         i = 0
         for section in tutorial.main_sections:
@@ -31,8 +31,8 @@ class TutorialTest(plex_nose.TestCase):
         def test(mock_html):
             container = tutorial.MosaicMenu('all')
 
-            eq_(24, len(container.objects))
             eqL_(container.title1, 'title.all')
+            eq_(len(container.objects), 24)
 
             # Ensure MosaicMenu calls HTML.ElementFromURL
             mock_html.assert_called_once_with('http://www.gamespot.com/videos/?page=1')
