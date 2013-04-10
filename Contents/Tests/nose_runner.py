@@ -97,4 +97,4 @@ sys.argv.insert(1, '-s')
 
 plex_nose.core = core
 plex_nose.nose.run()
-os._exit(1)
+os._exit(0)
