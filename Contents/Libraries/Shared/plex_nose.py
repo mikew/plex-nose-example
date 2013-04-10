@@ -13,6 +13,7 @@ def run_once():
         core.sandbox.publish_api(nose)
         core.sandbox.publish_api(nose.tools.eq_)
         core.sandbox.publish_api(nose.tools.ok_)
+        publish_helpers()
         run_once_ = True
 
 class EmptyDict(Framework.api.datakit.DictKit):
@@ -28,6 +29,21 @@ def stub_dict():
 
 def reset_dict():
     core.sandbox.execute('Dict.Reset()')
+
+def publish_helpers():
+    def eqL_(given, expected):
+        nose.tools.eq_(given._key, expected)
+
+    def eqF_(given, expected):
+        nose.tools.eq_(given._key._string1._key, expected)
+
+    def eqcb_(given, expected, **k):
+        cb = core.sandbox.environment['Callback'](expected, **k)
+        nose.tools.eq_(given, cb)
+
+    core.sandbox.publish_api(eqL_)
+    core.sandbox.publish_api(eqF_)
+    core.sandbox.publish_api(eqcb_)
 
 def publish_local_file(local_path, name = None):
     local_path = os.path.abspath(core.bundle_path + '/' + local_path)

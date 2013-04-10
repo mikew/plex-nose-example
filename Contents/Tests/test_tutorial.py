@@ -10,16 +10,15 @@ class TutorialTest(plex_nose.TestCase):
     def test_main_menu():
         container = tutorial.MainMenu()
 
-        eq_('title', container.title1._key)
         eq_(7, len(container.objects))
+        eqL_(container.title1, 'title')
 
         i = 0
         for section in tutorial.main_sections:
             subject = container.objects[i]
-            callback = Callback(tutorial.MosaicMenu, section = section)
 
-            eq_('title.%s' % section, subject.title._key)
-            eq_(callback, subject.key)
+            eqL_(subject.title, 'title.%s' % section)
+            eqcb_(subject.key, tutorial.MosaicMenu, section = section)
 
             i += 1
 
@@ -32,8 +31,8 @@ class TutorialTest(plex_nose.TestCase):
         def test(mock_html):
             container = tutorial.MosaicMenu('all')
 
-            eq_('title.all', container.title1._key)
             eq_(24, len(container.objects))
+            eqL_(container.title1, 'title.all')
 
             # Ensure MosaicMenu calls HTML.ElementFromURL
             mock_html.assert_called_once_with('http://www.gamespot.com/videos/?page=1')
