@@ -57,7 +57,7 @@ No modification to existing code is necessary, but you will need some files from
 Contents/Libraries/Shared/nose/
 Contents/Libraries/Shared/plex_nose.py
 Contents/Libraries/Shared/spec.py
-Contents/Tests/plex_runner.py
+Contents/Tests/nose_runner.py
 run-osx.sh
 run-ubuntu.sh
 ```
