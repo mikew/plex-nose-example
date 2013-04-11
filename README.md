@@ -35,7 +35,7 @@ cd plex-nose-example/
 
 To run the tests, you need to grab the environment variables that Plex
 channels are run with. Install `plex-nose-example.bundle` as you would
-any other Plex channel, [visit  /video/plex-nose-example/env][1]
+any other Plex channel, [visit  /video/plex-nose-example/env][env-demo]
 and note the contents of the `message` attribute. You are free to
 shut down the server after this.
 
@@ -64,7 +64,7 @@ run-ubuntu.sh
 
 ## Writing Tests
 
-[Nose][2] is included and used to run the tests, so you can write
+[Nose][nose] is included and used to run the tests, so you can write
 super-quick tests:
 
 ```python
@@ -142,7 +142,7 @@ class TestPublishLocalFile(plex_nose.TestCase):
             # TODO: write actual tests here
 ```
 
-[Mock][2] is located in `Contents/Libraries/Shared`, but not required to run
+[Mock][mock] is located in `Contents/Libraries/Shared`, but not required to run
 the tests.
 
 ## Guardfile
@@ -171,7 +171,7 @@ bundle install --path .bundle/gems/
 bundle exec guard --clear -n f
 ```
 
-[1]: http://localhost:32400/video/plex-nose-example/env
-[2]: https://nose.readthedocs.org/en/latest/
-[3]: http://www.voidspace.org.uk/python/mock/
+[env-demo]: http://localhost:32400/video/plex-nose-example/env
+[nose]: https://nose.readthedocs.org/en/latest/
+[mock]: http://www.voidspace.org.uk/python/mock/
 [example-output]: http://i.imgur.com/z2TWqix.png
