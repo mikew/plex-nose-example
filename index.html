@@ -1,0 +1,203 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Plex/nose Example by mikew</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Plex/nose Example</h1>
+        <p class="header">Getting started with Plex channels and nose</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/mikew/plex-nose-example/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/mikew/plex-nose-example/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/mikew/plex-nose-example">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/mikew">mikew</a></p>
+
+
+      </header>
+      <section>
+        <h2>About</h2>
+
+<p>This should show how to get Plex and nose working together.</p>
+
+<p><img src="http://i.imgur.com/z2TWqix.png" alt="example-output"></p>
+
+<h2>Requirements</h2>
+
+<p>You are expected to have Plex Media Server installed, of course.</p>
+
+<h2>Setup</h2>
+
+<p>This very repository is a functioning Gamespot.com channel.
+Please feel free to clone and start hacking.</p>
+
+<h3>Ubuntu</h3>
+
+<div class="highlight"><pre>git clone git://github.com/mikew/plex-nose-example.git
+<span class="nb">cd </span>plex-nose-example/
+./run-ubuntu.sh Contents/Tests/test_....py <span class="c"># run specific tests</span>
+./run-ubuntu.sh Contents/Tests/ <span class="c"># run all tests</span>
+</pre></div>
+
+<h3>OS X</h3>
+
+<div class="highlight"><pre>git clone git://github.com/mikew/plex-nose-example.git
+<span class="nb">cd </span>plex-nose-example/
+./run-osx.sh Contents/Tests/test_....py <span class="c"># run specific tests</span>
+./run-osx.sh Contents/Tests/ <span class="c"># run all tests</span>
+</pre></div>
+
+<h3>Other Operating Systems</h3>
+
+<p>To run the tests, you need to grab the environment variables that Plex
+channels are run with. Install <code>plex-nose-example.bundle</code> as you would
+any other Plex channel, <a href="http://localhost:32400/video/plex-nose-example/env">visit  /video/plex-nose-example/env</a>
+and note the contents of the <code>message</code> attribute. You are free to
+shut down the server after this.</p>
+
+<p>In addition to this, you must find the path to the media server's
+<code>Framework.bundle/.../Versions/2/Python</code> and assign it to
+<code>ENV[PLEX_FRAMEWORK_PATH]</code></p>
+
+<div class="highlight"><pre>env <span class="nv">PLEX_FRAMEWORK_PATH</span><span class="o">=</span><span class="s2">"..."</span> ... python Contents/Tests/nose_runner.py /full/path/to/Contents/Tests/test_....py
+</pre></div>
+
+<p>Note the <code>/full/path/to/...</code> requirement.</p>
+
+<h3>Integrating with existing channels</h3>
+
+<p>No modification to existing code is necessary, but you will need some files from this repository:</p>
+
+<pre><code>Contents/Libraries/Shared/nose/
+Contents/Libraries/Shared/plex_nose.py
+Contents/Libraries/Shared/spec.py
+Contents/Tests/nose_runner.py
+run-osx.sh
+run-ubuntu.sh
+</code></pre>
+
+<h2>Writing Tests</h2>
+
+<p><a href="https://nose.readthedocs.org/en/latest/">Nose</a> is included and used to run the tests, so you can write
+super-quick tests:</p>
+
+<div class="highlight"><pre><span class="kn">import</span> <span class="nn">plex_nose</span>
+
+<span class="nd">@plex_nose.sandbox</span>
+<span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+    <span class="n">ok_</span><span class="p">(</span><span class="s">'some_data'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">Dict</span><span class="p">)</span>
+</pre></div>
+
+<p>Just be sure to use the <code>plex_nose.sandbox</code> decorator.</p>
+
+<p>Or, to make things even easier you can just extend <code>plex_nose.TestCase</code>
+and stop using the decorator:</p>
+
+<div class="highlight"><pre><span class="kn">import</span> <span class="nn">plex_nose</span>
+
+<span class="k">class</span> <span class="nc">TestMyChannel</span><span class="p">(</span><span class="n">plex_nose</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+        <span class="n">ok_</span><span class="p">(</span><span class="s">'some_data'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">Dict</span><span class="p">)</span>
+</pre></div>
+
+<p>Note that the function definition is <code>def test():</code> and not <code>def test(self):</code>
+as you would expect. This is due to the fact that different parts of
+channel code are run in different sandboxes, there is no concept of <code>self</code>.</p>
+
+<p>Either way, the tests are run in the exact* environment as if they were
+launched by the media server, but in a <em>fraction</em> of the time.</p>
+
+<p>* Well, not exact. The <code>Dict</code> is cleaned after each run, and the log file
+is <code>./test.log</code> during the test runs.</p>
+
+<h3>Helpers</h3>
+
+<p>As mentioned earlier, nose is included, so <code>eq_</code> and <code>ok_</code> are made
+available to tests. In addition, there is also <code>eqL_</code>, <code>eqF_</code> and <code>eqcb_</code>.
+These tests against localization keys and callbacks.</p>
+
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">TestCaseHelpers</span><span class="p">(</span><span class="n">plex_unit</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_eqL</span><span class="p">():</span>
+        <span class="n">subject</span> <span class="o">=</span> <span class="n">L</span><span class="p">(</span><span class="s">'some-key'</span><span class="p">)</span>
+        <span class="n">eqL_</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="s">'some-key'</span><span class="p">)</span>
+        <span class="c"># vs. eq_(subject._key, 'some-key')</span>
+
+    <span class="k">def</span> <span class="nf">test_eqF</span><span class="p">():</span>
+        <span class="n">subject</span> <span class="o">=</span> <span class="n">F</span><span class="p">(</span><span class="s">'formatted-string'</span><span class="p">,</span> <span class="s">'param'</span><span class="p">)</span>
+        <span class="n">eqF_</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="s">'formatted-string'</span><span class="p">)</span>
+        <span class="c"># vs. eq_(subject._key.string1._key, 'formatted-string')</span>
+
+    <span class="k">def</span> <span class="nf">test_eqcb</span><span class="p">():</span>
+        <span class="n">subject</span> <span class="o">=</span> <span class="n">DirectoryObject</span><span class="p">(</span><span class="n">key</span> <span class="o">=</span> <span class="n">Callback</span><span class="p">(</span><span class="n">Videos</span><span class="p">,</span> <span class="n">section</span> <span class="o">=</span> <span class="s">'all'</span><span class="p">))</span>
+        <span class="n">eqcb_</span><span class="p">(</span><span class="n">subject</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="n">Videos</span><span class="p">,</span> <span class="n">section</span> <span class="o">=</span> <span class="s">'all'</span><span class="p">)</span>
+        <span class="c"># vs. eq_(subject.key, Callback(Videos, section = 'all'))</span>
+</pre></div>
+
+<p>Code written in the tests won't have access to <code>file</code> or <code>open</code>, which is
+necessary to mock data in tests some times. Use <code>plex_nose.publish_local_file</code>
+in these situations.</p>
+
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">TestPublishLocalFile</span><span class="p">(</span><span class="n">plex_nose</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">setUpClass</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="n">plex_nose</span><span class="o">.</span><span class="n">publish_local_file</span><span class="p">(</span><span class="s">'Contents/Tests/all_videos.html'</span><span class="p">,</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s">'all_videos'</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+        <span class="kn">import</span> <span class="nn">mock</span>
+        <span class="n">mocked</span> <span class="o">=</span> <span class="n">HTML</span><span class="o">.</span><span class="n">ElementFromString</span><span class="p">(</span><span class="n">all_videos</span><span class="p">)</span>
+        <span class="nd">@mock.patch.object</span><span class="p">(</span><span class="n">HTML</span><span class="p">,</span> <span class="s">'ElementFromURL'</span><span class="p">,</span> <span class="n">return_value</span> <span class="o">=</span> <span class="n">mocked</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">test_inner</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">):</span>
+            <span class="n">subject</span> <span class="o">=</span> <span class="n">HTML</span><span class="o">.</span><span class="n">ElementFromURL</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+            <span class="c"># TODO: write actual tests here</span>
+</pre></div>
+
+<p><a href="http://www.voidspace.org.uk/python/mock/">Mock</a> is located in <code>Contents/Libraries/Shared</code>, but not required to run
+the tests.</p>
+
+<h2>Guardfile</h2>
+
+<p>When using the Guardfile files saved to <code>Contents/Tests</code> will be
+run automatically. Files saved to <code>Contents/Code</code> will also have the
+corresponding test run, should one exist.</p>
+
+<p>To get up and running with the Guardfile, all you need is ruby and
+bundler installed.</p>
+
+<h3>Ubuntu</h3>
+
+<div class="highlight"><pre>sudo apt-get -y install ruby1.9.1 ruby1.9.1-dev
+sudo gem install bundler rake
+bundle install --path .bundle/gems/
+bundle <span class="nb">exec </span>guard --clear -n f
+</pre></div>
+
+<h3>OS X</h3>
+
+<div class="highlight"><pre>sudo gem install bundler
+bundle install --path .bundle/gems/
+bundle <span class="nb">exec </span>guard --clear -n f
+</pre></div>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
