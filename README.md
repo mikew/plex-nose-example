@@ -35,7 +35,7 @@ cd plex-nose-example/
 
 **Note:** Tests seem to run *much* faster when the server is left running.
 
-```bash
+```dos
 git clone git://github.com/mikew/plex-nose-example.git
 cd plex-nose-example\
 .\run-windows.bat Contents\Tests\test_....py # run specific tests
