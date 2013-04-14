@@ -31,6 +31,17 @@ cd plex-nose-example/
 ./run-osx.sh Contents/Tests/ # run all tests
 ```
 
+### Windows
+
+**Note:** Tests seem to run *much* faster when the server is left running.
+
+```bash
+git clone git://github.com/mikew/plex-nose-example.git
+cd plex-nose-example\
+.\run-windows.bat Contents\Tests\test_....py # run specific tests
+.\run-windows.bat Contents\Tests # run all tests
+```
+
 ### Other Operating Systems
 
 To run the tests, you need to grab the environment variables that Plex
