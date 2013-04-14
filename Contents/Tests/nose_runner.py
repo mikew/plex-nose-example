@@ -90,14 +90,19 @@ if core.init_code:
 sys.path.insert(0, core.code_path)
 
 import plex_nose
-import spec
 import sys
+
+plugins = []
 
 sys.argv.insert(1, '-vv')
 sys.argv.insert(1, '-s')
-sys.argv.insert(1, '--with-spec')
-sys.argv.insert(1, '--spec-color')
+
+if not 'nt' == os.name:
+    import spec
+    sys.argv.insert(1, '--with-spec')
+    sys.argv.insert(1, '--spec-color')
+    plugins = [ spec.Spec() ]
 
 plex_nose.core = core
-plex_nose.nose.run(addplugins = [ spec.Spec() ])
+plex_nose.nose.run(addplugins = plugins)
 os._exit(0)
